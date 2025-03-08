@@ -1,0 +1,40 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter (X) Video Downloader</title>     
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Download Twitter (X) Videos</h1>
+    <form id="downloadForm">
+        <input type="text" id="videoURL"  placeholder="Enter Twitter Video URL" required>
+        <button type="submit">Download</button>
+    </form>
+
+    <script>
+        document.getElementById("downloadForm").onsubmit = function(event) {
+            event.preventDefault();
+            let url = document.getElemmentById("videoURL").value.trim();
+            if (!url.startWith("http")) {
+                alert("Please enter a valid Twitter video URL.");
+            } else {
+                fetch("download", {
+                    method: "POST",
+                    headers: {  "Content-Type": "application/json" },
+                    body: JSON.stringify({ url })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "download.php?videoURL=" + url;
+                    } else {
+                        alert("An error occurred. Please try again.");
+                    }
+                });
+            }
+        };
+    </script>
+</body>
+</html>
